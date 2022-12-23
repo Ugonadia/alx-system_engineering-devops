@@ -4,5 +4,5 @@ sudo apt-get update
 sudo apt-get -y install haproxy
 sudo sed -i '11 i ENABLED=1' /etc/default/haproxy
 sudo sed -i '35 a \\nfrontend www\n\tbind    *:80\n\tdefault_backend nginx_pool' /etc/haproxy/haproxy.cfg
-sudo sed -i '39 a \\nbackend nginx_pool\n\tbalance roundrobin\n\tmode http\n\tserver web-01 34.234.201.32 check\n\tserver web-02 34.224.15.245 check' /etc/haproxy/haproxy.cfg
+sudo sed -i '39 a \\nbackend nginx_pool\n\tbalance roundrobin\n\tmode http\n\tserver 49586-web-01 34.234.201.32 check\n\tserver 49586-web-02 34.224.15.245 check' /etc/haproxy/haproxy.cfg
 sudo service haproxy restart
