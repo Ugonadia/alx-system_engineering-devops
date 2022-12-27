@@ -36,24 +36,19 @@ defaults
         option forwardfor
         option http-server-close
 
-frontend www-http
-        bind    *:80
-        redirect scheme https code 301 if !{ ssl_fc }
-        reqadd X-Fowarded-Proto:\ http
-        default_backend www-backend
-
-frontend www-https
-        bind *:443 ssl crt /etc/haproxy/certs/daft-val.tech.pem
-        reqadd X-Forwarded-Proto:\ https
-        acl letsencrypt-acl path_beg /.well-known/acme-challenge/
-        use_backend letsencrypt-backend if letsencrypt-acl
-        default_backend www-backend
-
-backend www-backend
-        balance roundrobin
-        redirect scheme https if !{ ssl_fc }
-        server web1 34.234.201.32:80 check
-        server web2 34.224.15.245:80 check
-
-backend letsencrypt-backend
-   server letsencrypt 127.0.0.1:54321
+frontend ugo-frontend-http                                                                                                              
+        bind *:80                                                                                                                       
+        mode http                                                                                                                       
+        http-request set-header X-Fowarded-Proto http                                                                                   
+        default_backend web-servers                                                                                                     
+                                                                                                                                        
+frontend ugo-frontend-https                                                                                                             
+        bind *:443 ssl crt /etc/haproxy/certs/ugo-nadia.tech.pem                                                                        
+        http-request set-header X-Forwarded-Proto https                                                                                 
+        http-request redirect scheme https code 301 unless { ssl_fc }                                                                   
+        default_backend web-servers                                                                                                     
+                                                                                                                                        
+backend web-servers                                                                                                                     
+        balance roundrobin                                                                                                              
+        server 49586-web-01 34.234.201.32:80 check                                                                                      
+        server 49586-web-02 34.224.15.245:80 check
