@@ -16,8 +16,8 @@ frontend  ugo-frontend
         default_backend web-servers
 backend web-servers
         balance roundrobin
-        server 49586-web-01 34.234.201.32:80 check
-        server 49586-web-02 34.224.15.245:80 check
+        server 49586-web-01 100.25.171.47:80 check
+        server 49586-web-02 34.239.254.73:80 check
 "
 echo "$server_config" | sudo tee -a /etc/haproxy/haproxy.cfg
 
