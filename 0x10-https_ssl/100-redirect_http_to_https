@@ -45,10 +45,10 @@ frontend ugo-frontend-http
 frontend ugo-frontend-https                                                                                                             
         bind *:443 ssl crt /etc/haproxy/certs/ugo-nadia.tech.pem                                                                        
         http-request set-header X-Forwarded-Proto https                                                                                 
-        http-request redirect scheme https code 301 unless { ssl_fc }                                                                   
+        redirect scheme https if !{ ssl_fc }                                                                                            
         default_backend web-servers                                                                                                     
                                                                                                                                         
 backend web-servers                                                                                                                     
         balance roundrobin                                                                                                              
-        server 49586-web-01 34.234.201.32:80 check                                                                                      
-        server 49586-web-02 34.224.15.245:80 check
+        server 49586-web-01 100.25.171.47:80 check                                                                                      
+        server 49586-web-02 34.239.254.73:80 check
