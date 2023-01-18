@@ -1,34 +1,25 @@
 #!/usr/bin/python3
-"""Write a Python script that, using this REST API,
-    for a given employee ID, returns information about
-    his/her TODO list progress.
+"""Using what you did in the task #0, extend your Python
+    script to export data in the JSON format.
 """
 
+from sys import argv
+import json
 import requests
-import sys
 
 
-if __name__ == '__main__':
-    employeeId = sys.argv[1]
-    baseUrl = "https://jsonplaceholder.typicode.com/users"
-    url = baseUrl + "/" + employeeId
+if __name__ == "__main__":
 
-    response = requests.get(url)
-    employeeName = response.json().get('name')
+    url = 'https://jsonplaceholder.typicode.com/users/'
+    response_username = requests.get(url + argv[1])
+    username = response_username.json()['username']
 
-    todoUrl = url + "/todos"
-    response = requests.get(todoUrl)
-    tasks = response.json()
-    done = 0
-    done_tasks = []
+    response_todos = requests.get(url + argv[1] + '/todos/')
+    tasks_list = []
+    for items in response_todos.json():
+        tasks_list.append({"task": items['title'],
+                           "completed": items['completed'],
+                           "username": username})
 
-    for task in tasks:
-        if task.get('completed'):
-            done_tasks.append(task)
-            done += 1
-
-    print("Employee {} is done with tasks({}/{}):"
-          .format(employeeName, done, len(tasks)))
-
-    for task in done_tasks:
-        print("\t {}".format(task.get('title')))
+    with open(argv[1] + ".json", 'w') as json_file:
+        json.dump({argv[1]: tasks_list}, json_file)
