@@ -4,23 +4,31 @@
     his/her TODO list progress.
 """
 
-
 import requests
-from sys import argv
+import sys
 
-if __name__ == "__main__":
-    url = 'https://jsonplaceholder.typicode.com/users/'
-    response_user = requests.get(url + argv[1])
-    employee_name = response_user.json()['name']
 
-    response_todos = requests.get(url + argv[1] + '/todos')
-    total_tasks = response_todos.json()
+if __name__ == '__main__':
+    employeeId = sys.argv[1]
+    baseUrl = "https://jsonplaceholder.typicode.com/users"
+    url = baseUrl + "/" + employeeId
+
+    response = requests.get(url)
+    employeeName = response.json().get('name')
+
+    todoUrl = url + "/todos"
+    response = requests.get(todoUrl)
+    tasks = response.json()
+    done = 0
     done_tasks = []
-    for dic in total_tasks:
-        if dic['completed']:
-            done_tasks.append(dic['title'])
 
-    print('Employee {} is done with tasks({}/{}):'
-          .format(employee_name, len(done_tasks), len(total_tasks)))
-    for tasks in done_tasks:
-        print('\t', tasks)
+    for task in tasks:
+        if task.get('completed'):
+            done_tasks.append(task)
+            done += 1
+
+    print("Employee {} is done with tasks({}/{}):"
+          .format(employeeName, done, len(tasks)))
+
+    for task in done_tasks:
+        print("\t {}".format(task.get('title')))
