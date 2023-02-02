@@ -11,4 +11,4 @@ The web stack to debug is a Wordpress website running on a LAMP stack.
 ---
 
 ## Author
-* **valen2510** - [Ugo Ozoeze](https://github.com/ugonadia)
+* **Ugo Ozoeze** - [Ugonadia](https://github.com/ugonadia)
